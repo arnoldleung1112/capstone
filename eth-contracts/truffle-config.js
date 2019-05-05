@@ -18,11 +18,13 @@
  *
  */
 
-// const HDWalletProvider = require('truffle-hdwallet-provider');
+const HDWalletProvider = require('truffle-hdwallet-provider');
 // const infuraKey = "fj4jll3k.....";
 //
 // const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
+var mnemonic = "minimum elite guilt observe private outer salute bargain chief horse lift gloom";
+
+// ganache-cli --mnemonic "minimum elite guilt observe private outer salute bargain chief horse lift gloom" -a 20 -l 8000000
 
 module.exports = {
   /**
@@ -42,11 +44,23 @@ module.exports = {
     // tab if you use this network and you must also set the `host`, `port` and `network_id`
     // options below to some value.
     //
-     development: {
-      host: "127.0.0.1",     // Localhost (default: none)
-      port: 8545,            // Standard Ethereum port (default: none)
-      network_id: "*",       // Any network (default: none)
-     },
+    development: {
+      provider: function() {
+        return new HDWalletProvider(mnemonic, "http://127.0.0.1:8545/", 0, 50);
+      },
+      network_id: "*",// Match any network id
+      gas: 8000000
+    },
+     
+    rinkeby: {
+      provider: function() { 
+        return new HDWalletProvider(mnemonic, 'https://rinkeby.infura.io/v3/14fb280c665542e8ae1c3386752a620e'/* your own infura API address here*/) 
+      },
+      network_id: 4,
+      gas: 6500000,
+      gasPrice: 20000000000,
+      skipDryRun: true
+    }
 
     // Another network with more advanced options...
     // advanced: {
@@ -85,7 +99,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      // version: "0.5.1",    // Fetch exact version from solc-bin (default: truffle's version)
+       version: "0.5.2",    // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {
